@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <meta charset="UTF-8">
 <title>Embedded Style Sheet</title>
 <style>
@@ -31,6 +32,9 @@
   </div>
   <div id="output_2">
     <h2>Wallets buying that were funded by creator wallet: </h2>
+    <div id="failure_message_creator_tfers">
+      <i id="warning_icon_creator_tfers" style="color:#FFAA00"></i>  
+    </div>
   </div>
 </body>
 <script type="text/javascript" src="testshit.js">
@@ -38,11 +42,64 @@
 </script>
 
 <script type="text/javascript">
+
+var both_finished = false;
   
 const element = document.getElementById("submit_button");
-element.addEventListener("click", myFunction);
+element.addEventListener("click", callStart2);
+element.addEventListener("click", callStart3);
 
-function myFunction(event) {
+function callStart3(collection_symbol) {
+  both_finished = false;
+  event.preventDefault()
+
+  var warning_element = document.getElementById("warning_icon_creator_tfers");
+  warning_element.className = "";
+
+  var collection_symbol= document.getElementById("collection").value;
+
+  var url = `https://detectooor.herokuapp.com/start3/${collection_symbol}`
+
+  console.log(url)
+
+  fetch(url).then(function (response) {
+
+    return response.json()
+
+  }).then(function(data) {
+    if (both_finished == true) {
+      var element = document.getElementById("loading_wheel");
+      element.className = "";
+    }
+
+    both_finished = true;
+
+    if (data.isError == true) {
+      var element = document.getElementById("warning_icon_creator_tfers");
+      element.className = "fa fa-warning";
+    }
+
+    console.log(data)
+
+    for (const property in data.walletsFundedByCreator) {
+      const paragraph = document.createElement("p");
+      paragraph.className = "output"
+      paragraph.innerHTML = `${property}`
+      document.getElementById("output_2").appendChild(paragraph)
+    } 
+
+  }).catch(function(err) {
+
+    console.warn('Something went wrong.', err);
+
+    var element = document.getElementById("loading_wheel");
+    element.className = "";
+
+  })
+}
+
+function callStart2(event) {
+  both_finished = false;
   event.preventDefault()
 
   const output = document.querySelectorAll('.output');
@@ -66,12 +123,14 @@ function myFunction(event) {
   return response.json();
 }).then(function (data) {
 
-  var element = document.getElementById("loading_wheel");
-  element.className = "";
+  if (both_finished == true) {
+    var element = document.getElementById("loading_wheel");
+    element.className = "";
+  }
+
+  both_finished = true;
 
   console.log(data.washTradingWallets)
-
-  console.log(data.walletsFundedByCreator)
 
   for (const property in data.washTradingWallets) {
     const row = document.createElement("tr");
@@ -106,14 +165,6 @@ function myFunction(event) {
 
 
     document.getElementById("wash_trading_table").appendChild(row)
-
-  }
-
-    for (const property in data.walletsFundedByCreator) {
-      const paragraph = document.createElement("p");
-      paragraph.className = "output"
-      paragraph.innerHTML = `${property}`
-      document.getElementById("output_2").appendChild(paragraph)
 
   }
   
