@@ -11,14 +11,17 @@
 </style>
 </head>
 <body>
-  <h1>Detectoooor</h1>
-  <form action="/action_page.php">
+  <div class="header">
+    <img class="logo" src="static/thugraffes_logo.png" alt="Avatar" width="35" height="35">
+    <h1 class="title">Detectooor</h1>   
+  </div>
+  <div class="search_bar_container">
     <label for="collection" id="collection_symbol_text">Collection Symbol:</label>
-    <input type="text" id="collection" name="collection"><br><br>
+    <input type="text" id="collection" name="collection">
     <button id="submit_button">
       Submit <i id="loading_wheel"></i>
     </button>
-  </form>
+  </div>
   <div id="output">
     <h2>Wallets that bought/sold between eachother atleast once: </h2>
     <table id="wash_trading_table">
@@ -32,6 +35,13 @@
   </div>
   <div id="output_2">
     <h2>Wallets buying that were funded by creator wallet: </h2>
+    <table id="creator_tfer_table">
+      <tr>
+        <th>Volume</th>
+        <th>Txns</th>
+        <th>Wallet</th>
+      </tr>
+    </table>
     <div id="failure_message_creator_tfers">
       <i id="warning_icon_creator_tfers" style="color:#FFAA00"></i>  
     </div>
@@ -58,7 +68,7 @@ async function callStart3(collection_symbol) {
 
   var collection_symbol= document.getElementById("collection").value;
 
-  var url = `https://detectooor.herokuapp.com/start3/${collection_symbol}`
+  var url = `http://localhost:5000/start3/${collection_symbol}`
 
   console.log(url)
 
@@ -94,11 +104,41 @@ async function callStart3(collection_symbol) {
     console.log("yooo creator xfers data", creatorXfersOrError)
 
     for (const property in creatorXfersOrError) {
+      const row = document.createElement("tr");
+      row.className = "output"
+      let td_vol = document.createElement("td")
+      let td_txns = document.createElement("td")
+      let wallet = document.createElement("td")
+      let wallet_link = document.createElement("a")
+
+      wallet_link.href = `https://magiceden.io/u/${property}`
+      wallet_link.target = "_blank"
+
+      td_vol.innerHTML = `${creatorXfersOrError[property].vol.toFixed(2)}`
+      td_txns.innerHTML = `${creatorXfersOrError[property].txns}`
+      wallet_link.innerHTML = `${property}`
+
+      wallet.appendChild(wallet_link)
+
+      row.appendChild(td_vol);
+      row.appendChild(td_txns);
+      row.appendChild(wallet);
+
+      // <a href="url">link text</a>
+      // target="_blank"
+
+
+      document.getElementById("creator_tfer_table").appendChild(row)
+
+    }
+/*
+    for (const property in creatorXfersOrError) {
       const paragraph = document.createElement("p");
       paragraph.className = "output"
-      paragraph.innerHTML = `${property}`
+      paragraph.innerHTML = `${property} - Txns: ${creatorXfersOrError[property].txns}, Vol: ${creatorXfersOrError[property].vol}`
       document.getElementById("output_2").appendChild(paragraph)
     } 
+*/
 
   }).catch(function(err) {
 
@@ -123,7 +163,7 @@ function callStart2(event) {
   var collection_symbol= document.getElementById("collection").value;
 
   console.log(collection_symbol)
-  var url = `https://detectooor.herokuapp.com/start2/${collection_symbol}`
+  var url = `http://localhost:5000/start2/${collection_symbol}`
 
   console.log(url)
 
@@ -215,11 +255,11 @@ async function retrieveCreatorXfersData(data, keyNotFound=true) {
 
   try {
     var keyNotFound = keyNotFound;
-    var url = `https://detectooor.herokuapp.com/results${data.location}`
+    var url = `http://localhost:5000/results${data.location}`
     console.log(url)
     console.log("making /results call")
 
-    const res = await fetch(`http://localhost:5000/results${data.location}`)
+    const res = await fetch(url)
 
     var resBody = await res.json()
 
