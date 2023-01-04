@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style1.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <meta charset="UTF-8">
@@ -16,13 +16,8 @@
     <h1 class="title">Detectooor</h1>   
   </div>
   <div class="search_bar_container">
-    <label for="collection" id="collection_symbol_text">Collection Symbol:</label>
-    <input type="text" id="collection" name="collection">
-    <button id="submit_button">
-      Submit <i id="loading_wheel"></i>
-    </button>
-  </div>
-  <div class="search_options">
+    <label for="collection" id="collection_symbol_text"></label>
+    <input type="text" id="collection" name="collection" placeholder="collection symbol">
     <button class="search_option all_time" id="search_option_toggled">
       All-time 
     </button>
@@ -34,6 +29,9 @@
     </button>
     <button class="search_option 24hr" >
       24 hr
+    </button>
+    <button id="submit_button">
+      Submit <i id="loading_wheel"></i>
     </button>
   </div>
   <div id="output">
