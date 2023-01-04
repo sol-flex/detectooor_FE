@@ -22,6 +22,20 @@
       Submit <i id="loading_wheel"></i>
     </button>
   </div>
+  <div class="search_options">
+    <button class="search_option all_time" id="search_option_toggled">
+      All-time 
+    </button>
+    <button class="search_option 1hr" >
+      1 hr
+    </button>
+    <button class="search_option 6hr" >
+      6 hr
+    </button>
+    <button class="search_option 24hr" >
+      24 hr
+    </button>
+  </div>
   <div id="output">
     <h2>Wallets that bought/sold between eachother atleast once: </h2>
     <table id="wash_trading_table">
@@ -59,6 +73,25 @@ const element = document.getElementById("submit_button");
 element.addEventListener("click", callStart2);
 element.addEventListener("click", callStart3);
 
+const searchOption = document.getElementsByClassName("search_option");
+
+for (i = 0; i < searchOption.length; i++) {
+  searchOption[i].addEventListener("click", onClickSearchOption)
+  console.log(searchOption[i]);
+}
+
+function onClickSearchOption(e) {
+  console.log(e.target)
+  console.log(e.target.classList[1])
+  for (i = 0; i < searchOption.length; i++) {
+  searchOption[i].removeAttribute('id')
+  }
+
+  e.target.setAttribute('id', 'search_option_toggled')
+
+}
+
+
 async function callStart3(collection_symbol) {
   both_finished = false;
   event.preventDefault()
@@ -68,7 +101,10 @@ async function callStart3(collection_symbol) {
 
   var collection_symbol= document.getElementById("collection").value;
 
-  var url = `https://detectooor.herokuapp.com/start3/${collection_symbol}`
+  var search_option_toggle = document.getElementById("search_option_toggled")
+  var time_frame = search_option_toggle.classList[1]
+
+  var url = `https://detectooor.herokuapp.com/start3/${collection_symbol}/${time_frame}`
 
   console.log(url)
 
@@ -162,8 +198,11 @@ function callStart2(event) {
 
   var collection_symbol= document.getElementById("collection").value;
 
+  var search_option_toggle = document.getElementById("search_option_toggled")
+  var time_frame = search_option_toggle.classList[1]
+
   console.log(collection_symbol)
-  var url = `https://detectooor.herokuapp.com/start2/${collection_symbol}`
+  var url = `https://detectooor.herokuapp.com/start2/${collection_symbol}/${time_frame}`
 
   console.log(url)
 

@@ -68,3 +68,23 @@ img {
 #collection {
   margin-left: 2px;
 }
+
+.search_options {
+  margin-top: 10px;
+  margin-left: 2px;
+}
+
+.search_option {
+  background-color:  #120D18;
+  border-style: solid;
+  border-color: #2B2037;
+  color:  white;
+  border-radius:  0.1rem;
+  margin-left: 10px;
+  width:70px;
+  height: 30px;
+}
+
+#search_option_toggled {
+  background-color: #817490;
+}
